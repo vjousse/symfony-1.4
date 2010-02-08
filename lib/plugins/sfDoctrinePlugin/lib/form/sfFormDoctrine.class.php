@@ -18,7 +18,7 @@
  * @subpackage form
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfFormDoctrine.class.php 24971 2009-12-05 15:05:03Z Kris.Wallsmith $
+ * @version    SVN: $Id: sfFormDoctrine.class.php 27749 2010-02-08 18:48:39Z Kris.Wallsmith $
  */
 abstract class sfFormDoctrine extends sfFormObject
 {
@@ -227,17 +227,18 @@ abstract class sfFormDoctrine extends sfFormObject
    */
   protected function updateDefaultsFromObject()
   {
+    $defaults = $this->getDefaults();
+
     // update defaults for the main object
     if ($this->isNew())
     {
-      $this->setDefaults(array_merge($this->getObject()->toArray(false), $this->getDefaults()));
+      $defaults = $this->getObject()->toArray(false) + $defaults;
     }
     else
     {
-      $this->setDefaults(array_merge($this->getDefaults(), $this->getObject()->toArray(false)));
+      $defaults = $this->getDefaults() + $this->getObject()->toArray(false);
     }
 
-    $defaults = $this->getDefaults();
     foreach ($this->embeddedForms as $name => $form)
     {
       if ($form instanceof sfFormDoctrine)
@@ -246,6 +247,7 @@ abstract class sfFormDoctrine extends sfFormObject
         $defaults[$name] = $form->getDefaults();
       }
     }
+
     $this->setDefaults($defaults);
   }
 

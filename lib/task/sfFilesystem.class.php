@@ -14,7 +14,7 @@
  * @package    symfony
  * @subpackage util
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfFilesystem.class.php 24991 2009-12-06 20:22:52Z Kris.Wallsmith $
+ * @version    SVN: $Id: sfFilesystem.class.php 27751 2010-02-08 19:09:00Z Kris.Wallsmith $
  */
 class sfFilesystem
 {
@@ -198,7 +198,7 @@ class sfFilesystem
    */
   public function symlink($originDir, $targetDir, $copyOnWindows = false)
   {
-    if (!function_exists('symlink') && $copyOnWindows)
+    if ('\\' == DIRECTORY_SEPARATOR && $copyOnWindows)
     {
       $finder = sfFinder::type('any');
       $this->mirror($originDir, $targetDir, $finder);
@@ -234,10 +234,11 @@ class sfFilesystem
    */
   public function relativeSymlink($originDir, $targetDir, $copyOnWindows = false)
   {
-    if (function_exists('symlink') || !$copyOnWindows)
+    if ('\\' != DIRECTORY_SEPARATOR || !$copyOnWindows)
     {
       $originDir = $this->calculateRelativeDir($targetDir, $originDir);
     }
+
     $this->symlink($originDir, $targetDir, $copyOnWindows);
   }
 
