@@ -14,7 +14,7 @@
  * @package    symfony
  * @subpackage helper
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: UrlHelper.php 27605 2010-02-05 18:07:39Z FabianLange $
+ * @version    SVN: $Id: UrlHelper.php 27753 2010-02-08 19:24:39Z Kris.Wallsmith $
  */
 
 function link_to2($name, $routeName, $params, $options = array())
@@ -177,7 +177,7 @@ function link_to()
   }
 }
 
-function url_for_form(sfForm $form, $routePrefix)
+function url_for_form(sfFormObject $form, $routePrefix)
 {
   $format = '%s/%s';
   if ('@' == $routePrefix[0])
