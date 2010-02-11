@@ -14,7 +14,7 @@
  * @package    symfony
  * @subpackage util
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfFilesystem.class.php 27751 2010-02-08 19:09:00Z Kris.Wallsmith $
+ * @version    SVN: $Id: sfFilesystem.class.php 27816 2010-02-10 15:46:46Z FabianLange $
  */
 class sfFilesystem
 {
@@ -182,7 +182,7 @@ class sfFilesystem
     // we check that target does not exist
     if (is_readable($target))
     {
-      throw new sfException(sprintf('Cannot rename because the target "%" already exist.', $target));
+      throw new sfException(sprintf('Cannot rename because the target "%s" already exist.', $target));
     }
 
     $this->logSection('rename', $origin.' > '.$target);

@@ -16,7 +16,7 @@
  * @package    symfony
  * @subpackage util
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfBrowserBase.class.php 27616 2010-02-06 11:14:40Z FabianLange $
+ * @version    SVN: $Id: sfBrowserBase.class.php 27836 2010-02-10 19:00:00Z Kris.Wallsmith $
  */
 abstract class sfBrowserBase
 {
@@ -805,6 +805,11 @@ abstract class sfBrowserBase
     $xpath = $this->getResponseDomXpath();
     foreach ($xpath->query('descendant::input | descendant::textarea | descendant::select', $item) as $element)
     {
+      if ($element->hasAttribute('disabled'))
+      {
+        continue;
+      }
+
       $elementName = $element->getAttribute('name');
       $nodeName    = $element->nodeName;
       $value       = null;

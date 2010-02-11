@@ -18,7 +18,7 @@
  * @subpackage generator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfDoctrineFormGenerator.class.php 27742 2010-02-08 15:46:35Z Kris.Wallsmith $
+ * @version    SVN: $Id: sfDoctrineFormGenerator.class.php 27842 2010-02-10 19:42:03Z Kris.Wallsmith $
  */
 class sfDoctrineFormGenerator extends sfGenerator
 {
@@ -429,7 +429,7 @@ class sfDoctrineFormGenerator extends sfGenerator
     }
     else if ($column->isPrimaryKey())
     {
-      $options[] = sprintf('\'model\' => $this->getModelName(), \'column\' => \'%s\'', $column->getName());
+      $options[] = sprintf('\'model\' => $this->getModelName(), \'column\' => \'%s\'', $column->getFieldName());
     }
     else
     {
@@ -566,7 +566,7 @@ class sfDoctrineFormGenerator extends sfGenerator
     {
       if ($column->getDefinitionKey('unique'))
       {
-        $uniqueColumns[] = array($column->getName());
+        $uniqueColumns[] = array($column->getFieldName());
       }
     }
 
