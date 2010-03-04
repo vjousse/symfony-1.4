@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Mysql.php 6624 2009-11-03 01:21:08Z jwage $
+ *  $Id: Mysql.php 7289 2010-03-02 17:03:35Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,7 +29,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 6624 $
+ * @version     $Revision: 7289 $
  */
 class Doctrine_Export_Mysql extends Doctrine_Export
 {
@@ -133,7 +133,7 @@ class Doctrine_Export_Mysql extends Doctrine_Export
                     foreach ($options['indexes'] as $definition) {
                         if (is_string($definition['fields'])) {
                             // Check if index already exists on the column                            
-                            $found = ($local == $definition['fields']);                        
+                            $found = $found || ($local == $definition['fields']);                    
                         } else if (in_array($local, $definition['fields']) && count($definition['fields']) === 1) {
                             // Index already exists on the column
                             $found = true;

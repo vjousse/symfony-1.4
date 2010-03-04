@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Email.php 6468 2009-10-09 20:41:28Z jwage $
+ *  $Id: Email.php 7254 2010-03-01 21:19:50Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -27,7 +27,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 6468 $
+ * @version     $Revision: 7254 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_Validator_Email extends Doctrine_Validator_Driver
@@ -86,7 +86,7 @@ class Doctrine_Validator_Email extends Doctrine_Validator_Driver
     }
     
     /**
-     * Check DNA Records for MX type
+     * Check DNS Records for MX type
      *
      * @param string $host Host name
      * @return boolean

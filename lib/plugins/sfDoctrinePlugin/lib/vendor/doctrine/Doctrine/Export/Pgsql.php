@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Pgsql.php 6498 2009-10-13 04:56:16Z jwage $
+ *  $Id: Pgsql.php 7278 2010-03-02 00:58:28Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,7 +29,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 6498 $
+ * @version     $Revision: 7278 $
  */
 class Doctrine_Export_Pgsql extends Doctrine_Export
 {
@@ -367,7 +367,9 @@ class Doctrine_Export_Pgsql extends Doctrine_Export
                 }
             }
         }
-        
+        if (isset($options['sequenceName'])) {
+            $sql[] = $this->createSequenceSql($options['sequenceName']);
+        }
         return $sql;
     }
 

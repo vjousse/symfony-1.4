@@ -114,6 +114,7 @@ class Doctrine_Template_Listener_Sluggable extends Doctrine_Record_Listener
             foreach ($this->_options['fields'] as $field) {
                 $value .= $record->$field . ' ';
             }
+            $value = substr($value, 0, -1);
         }
 
     	if ($this->_options['unique'] === true) {
@@ -212,11 +213,11 @@ class Doctrine_Template_Listener_Sluggable extends Doctrine_Record_Listener
 
         $similarSlugs = array();
         foreach ($similarSlugResult as $key => $value) {
-            $similarSlugs[$key] = $value[$name];
+            $similarSlugs[$key] = strtolower($value[$name]);
         }
 
         $i = 1;
-        while (in_array($slug, $similarSlugs)) {
+        while (in_array(strtolower($slug), $similarSlugs)) {
             $slug = call_user_func_array($this->_options['builder'], array($proposal.'-'.$i, $record));
             $i++;
         }

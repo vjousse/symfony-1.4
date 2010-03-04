@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Query.php 6792 2009-11-23 22:27:26Z jwage $
+ *  $Id: Query.php 7260 2010-03-01 21:34:37Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -30,7 +30,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 6792 $
+ * @version     $Revision: 7260 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @todo        Proposal: This class does far too much. It should have only 1 task: Collecting
  *              the DQL query parts and the query parameters (the query state and caching options/methods
@@ -279,6 +279,10 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
     public function fetchOne($params = array(), $hydrationMode = null)
     {
         $collection = $this->execute($params, $hydrationMode);
+
+        if (is_scalar($collection)) {
+            return $collection;
+        }
 
         if (count($collection) === 0) {
             return false;

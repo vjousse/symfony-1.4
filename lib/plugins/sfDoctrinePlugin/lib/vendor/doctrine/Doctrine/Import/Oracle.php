@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Oracle.php 6484 2009-10-12 17:40:41Z jwage $
+ *  $Id: Oracle.php 7272 2010-03-01 23:45:38Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -24,7 +24,7 @@
  * @subpackage  Import
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
- * @version     $Revision: 6484 $
+ * @version     $Revision: 7272 $
  * @link        www.phpdoctrine.org
  * @since       1.0
  */
@@ -203,7 +203,7 @@ QEND;
      */
     public function listTables($database = null)
     {
-        $query = "SELECT * FROM user_objects WHERE object_type = 'TABLE'";
+        $query = "SELECT * FROM user_objects WHERE object_type = 'TABLE' and object_name in (select table_name from user_tables)";
         return $this->conn->fetchColumn($query);
     }
 

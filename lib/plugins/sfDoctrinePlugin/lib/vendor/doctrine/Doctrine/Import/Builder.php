@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Builder.php 7200 2010-02-21 09:37:37Z beberlei $
+ *  $Id: Builder.php 7294 2010-03-02 17:59:20Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -30,7 +30,7 @@
  * @link        www.phpdoctrine.org
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @since       1.0
- * @version     $Revision: 7200 $
+ * @version     $Revision: 7294 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Jukka Hassinen <Jukka.Hassinen@BrainAlliance.com>
  * @author      Nicolas Bérard-Nault <nicobn@php.net>
@@ -508,9 +508,25 @@ class Doctrine_Import_Builder extends Doctrine_Builder
      */
     public function buildColumns(array $columns)
     {
+        $manager = Doctrine_Manager::getInstance();
+        $refl = new ReflectionClass($this->_baseClassName);
+
         $build = null;
         foreach ($columns as $name => $column) {
             $columnName = isset($column['name']) ? $column['name']:$name;
+            if ($manager->getAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE)) {
+                $e = explode(' as ', $columnName);
+                $fieldName = isset($e[1]) ? $e[1] : $e[0];
+                $classified = Doctrine_Inflector::classify($fieldName);
+                $getter = 'get' . $classified;
+                $setter = 'set' . $classified;
+
+                if ($refl->hasMethod($getter) || $refl->hasMethod($setter)) {
+                    throw new Doctrine_Import_Exception(
+                        sprintf('When using the attribute ATTR_AUTO_ACCESSOR_OVERRIDE you cannot use the field name "%s" because it is reserved by Doctrine. You must choose another field name.', $fieldName)
+                    );
+                }
+            }
             $build .= "        ".'$this->hasColumn(\'' . $columnName . '\', \'' . $column['type'] . '\'';
 
             if ($column['length']) {
@@ -646,7 +662,7 @@ class Doctrine_Import_Builder extends Doctrine_Builder
         $ret[] = '@package    ' . $this->_phpDocPackage;
         $ret[] = '@subpackage ' . $this->_phpDocSubpackage;
         $ret[] = '@author     ' . $this->_phpDocName . ' <' . $this->_phpDocEmail . '>';
-        $ret[] = '@version    SVN: $Id: Builder.php 7200 2010-02-21 09:37:37Z beberlei $';
+        $ret[] = '@version    SVN: $Id: Builder.php 7294 2010-03-02 17:59:20Z jwage $';
 
         $ret = ' * ' . implode(PHP_EOL . ' * ', $ret);
         $ret = ' ' . trim($ret);
@@ -804,7 +820,7 @@ class Doctrine_Import_Builder extends Doctrine_Builder
             }
 
             $useOptions = ( ! empty($options) && isset($options['useOptions']) && $options['useOptions'] == true) 
-                ? '$this->getOptions()' : 'array()';
+                ? '$this->getTable()->getOptions()' : 'array()';
             $class = ( ! empty($options) && isset($options['class'])) ? $options['class'] : $name;
 
             $build .= "    \$this->addListener(new " . $class . "(" . $useOptions . "), '" . $name . "');" . PHP_EOL;

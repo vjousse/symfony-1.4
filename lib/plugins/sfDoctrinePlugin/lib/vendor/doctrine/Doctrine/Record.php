@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Record.php 6806 2009-11-24 21:30:38Z jwage $
+ *  $Id: Record.php 7298 2010-03-02 19:13:01Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,7 +29,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 6806 $
+ * @version     $Revision: 7298 $
  */
 abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Countable, IteratorAggregate, Serializable
 {
@@ -1523,7 +1523,13 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         } else if (in_array($type, array('integer', 'int')) && is_numeric($old) && is_numeric($new)) {
             return (int) $old !== (int) $new;
         } else if ($type == 'timestamp' || $type == 'date') {
-            return strtotime($old) !== strtotime($new);
+            $oldStrToTime = strtotime($old);
+            $newStrToTime = strtotime($new);
+            if ($oldStrToTime && $newStrToTime) {
+                return $oldStrToTime !== $newStrToTime;
+            } else {
+                return $old !== $new;
+            }
         } else {
             return $old !== $new;
         }
@@ -1878,7 +1884,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
                 $value = null;
             }
 
-            $columnValue = $this->get($column);
+            $columnValue = $this->get($column, false);
 
             if ($columnValue instanceof Doctrine_Record) {
                 $a[$column] = $columnValue->getIncremented();
@@ -2182,8 +2188,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         if ($deep) {
             foreach ($this->_references as $key => $value) {
                 if ($value instanceof Doctrine_Collection) {
-                    foreach ($value as $record) {
-                        $ret->{$key}[] = $record->copy($deep);
+                    foreach ($value as $valueKey => $record) {
+                        $ret->{$key}[$valueKey] = $record->copy($deep);
                     }
                 } else if ($value instanceof Doctrine_Record) {
                     $ret->set($key, $value->copy($deep));
@@ -2496,9 +2502,9 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
 
             foreach ($records as $record) {
                 if ($this->$alias instanceof Doctrine_Record) {
-                    $this->$alias = $record;
+                    $this->set($alias, $record);
                 } else {
-                    $this[$alias]->add($record);
+                    $this->get($alias)->add($record);
                 }
             }
 

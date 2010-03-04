@@ -16,7 +16,7 @@
  * @subpackage controller
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfController.class.php 24265 2009-11-23 11:55:33Z Kris.Wallsmith $
+ * @version    SVN: $Id: sfController.class.php 28365 2010-03-03 14:42:10Z fabien $
  */
 abstract class sfController
 {
@@ -24,7 +24,8 @@ abstract class sfController
     $context           = null,
     $dispatcher        = null,
     $controllerClasses = array(),
-    $renderMode        = sfView::RENDER_CLIENT;
+    $renderMode        = sfView::RENDER_CLIENT,
+    $maxForwards       = 5;
 
   /**
    * Class constructor.
@@ -172,7 +173,7 @@ abstract class sfController
     $moduleName = preg_replace('/[^a-z0-9_]+/i', '', $moduleName);
     $actionName = preg_replace('/[^a-z0-9_]+/i', '', $actionName);
 
-    if ($this->getActionStack()->getSize() >= 5)
+    if ($this->getActionStack()->getSize() >= $this->maxForwards)
     {
       // let's kill this party before it turns into cpu cycle hell
       throw new sfForwardException('Too many forwards have been detected for this request.');

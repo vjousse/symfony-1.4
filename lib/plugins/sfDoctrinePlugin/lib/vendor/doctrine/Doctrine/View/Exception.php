@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Exception.php 5798 2009-06-02 15:10:46Z piccoloprincipe $
+ *  $Id: Exception.php 7259 2010-03-01 21:31:43Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -20,7 +20,7 @@
  */
 
 /**
- * Doctrine_Validator_Exception
+ * Doctrine_View_Exception
  *
  * @package     Doctrine
  * @subpackage  View
@@ -28,7 +28,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 5798 $
+ * @version     $Revision: 7259 $
  */
 class Doctrine_View_Exception extends Doctrine_Exception
 { }

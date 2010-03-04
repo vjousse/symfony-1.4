@@ -193,7 +193,12 @@ abstract class Doctrine_Record_Generator extends Doctrine_Record_Abstract
     {
         // Bind model 
         $conn = $this->_options['table']->getConnection();
-        $conn->getManager()->bindComponent($this->_options['className'], $conn->getName());
+        $bindConnName = $conn->getManager()->getConnectionForComponent($this->_options['table']->getComponentName())->getName();
+        if ($bindConnName) {
+            $conn->getManager()->bindComponent($this->_options['className'], $bindConnName);
+        } else {
+            $conn->getManager()->bindComponent($this->_options['className'], $conn->getName());
+        }
 
         // Create table
         $tableClass = $conn->getAttribute(Doctrine_Core::ATTR_TABLE_CLASS);
@@ -439,6 +444,9 @@ abstract class Doctrine_Record_Generator extends Doctrine_Record_Abstract
     public function generateClass(array $definition = array())
     {
         $definition['className'] = $this->_options['className'];
+        if (isset($this->_options['listeners'])) {
+            $definition['listeners'] = $this->_options['listeners'];
+        }
 
         $builder = new Doctrine_Import_Builder();
         $builderOptions = isset($this->_options['builderOptions']) ? (array) $this->_options['builderOptions']:array();
