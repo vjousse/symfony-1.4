@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Query.php 7260 2010-03-01 21:34:37Z jwage $
+ *  $Id: Query.php 7325 2010-03-11 15:37:02Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -30,7 +30,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 7260 $
+ * @version     $Revision: 7325 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @todo        Proposal: This class does far too much. It should have only 1 task: Collecting
  *              the DQL query parts and the query parameters (the query state and caching options/methods
@@ -1443,6 +1443,12 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
             }
         }
 
+        // Add having fields that got stripped out of select
+        preg_match_all('/`[a-z0-9_]+`\.`[a-z0-9_]+`/i', implode(' ', $having), $matches, PREG_PATTERN_ORDER);
+        if (count($matches[0]) > 0) {
+            $subquery .= ', ' . implode(', ', array_unique($matches[0]));
+        }
+
         $subquery .= ' FROM';
 
         foreach ($this->_sqlParts['from'] as $part) {
@@ -2054,6 +2060,11 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
                     if (strpos($field, '(') !== false) {
                         $selectFields .= ', ' . $field;
                     }
+                }
+                // Add having fields that got stripped out of select
+                preg_match_all('/`[a-z0-9_]+`\.`[a-z0-9_]+`/i', $having, $matches, PREG_PATTERN_ORDER);
+                if (count($matches[0]) > 0) {
+                    $selectFields .= ', ' . implode(', ', array_unique($matches[0]));
                 }
             }
 
