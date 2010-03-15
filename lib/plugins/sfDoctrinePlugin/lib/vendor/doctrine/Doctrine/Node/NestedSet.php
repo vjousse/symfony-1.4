@@ -1,6 +1,6 @@
 <?php
 /*
- *    $Id: NestedSet.php 7285 2010-03-02 02:04:46Z guilhermeblanco $
+ *    $Id: NestedSet.php 7354 2010-03-15 16:22:12Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -27,7 +27,7 @@
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       www.phpdoctrine.org
  * @since      1.0
- * @version    $Revision: 7285 $
+ * @version    $Revision: 7354 $
  * @author     Joe Simms <joe.simms@websites4.com>
  * @author     Roman Borschel <roman@code-factory.org>     
  */
@@ -734,10 +734,10 @@ class Doctrine_Node_NestedSet extends Doctrine_Node implements Doctrine_Node_Int
     public function moveAsFirstChildOf(Doctrine_Record $dest)
     {
         if (
-		    $dest === $this->record ||
+		    $dest === $this->record || $this->isAncestorOf($dest) ||
 			($dest->exists() && $this->record->exists() && $dest->identifier() === $this->record->identifier())
 		) {
-            throw new Doctrine_Tree_Exception("Cannot move node as first child of itself");
+            throw new Doctrine_Tree_Exception("Cannot move node as first child of itself or into a descendant");
 
 			return false;
 		}
@@ -762,10 +762,10 @@ class Doctrine_Node_NestedSet extends Doctrine_Node implements Doctrine_Node_Int
     public function moveAsLastChildOf(Doctrine_Record $dest)
     {
         if (
-		    $dest === $this->record ||
+		    $dest === $this->record || $this->isAncestorOf($dest) ||
 			($dest->exists() && $this->record->exists() && $dest->identifier() === $this->record->identifier())
 		) {
-            throw new Doctrine_Tree_Exception("Cannot move node as last child of itself");
+            throw new Doctrine_Tree_Exception("Cannot move node as last child of itself or into a descendant");
 
 			return false;
 		}
@@ -908,6 +908,18 @@ class Doctrine_Node_NestedSet extends Doctrine_Node implements Doctrine_Node_Int
         return (($this->getLeftValue() >= $subj->getNode()->getLeftValue()) &&
                 ($this->getRightValue() <= $subj->getNode()->getRightValue()) &&
                 ($this->getRootValue() == $subj->getNode()->getRootValue()));
+    }
+
+    /**
+     * determines if node is ancestor of subject node
+     *
+     * @return bool            
+     */
+    public function isAncestorOf(Doctrine_Record $subj)
+    {
+        return (($subj->getNode()->getLeftValue() > $this->getLeftValue()) &&
+                ($subj->getNode()->getRightValue() < $this->getRightValue()) &&
+                ($subj->getNode()->getRootValue() == $this->getRootValue()));
     }
 
     /**
@@ -1058,18 +1070,18 @@ class Doctrine_Node_NestedSet extends Doctrine_Node implements Doctrine_Node_Int
 
         $qLeft  = Doctrine_Core::getTable($componentName)
             ->createQuery()
-            ->update();
+            ->update($componentName);
 
         $qRight = Doctrine_Core::getTable($componentName)
             ->createQuery()
-            ->update();
+            ->update($componentName);
 
         $qLeft = $qLeft->set($componentName . '.lft', $componentName.'.lft + ?', $delta)
                        ->where($componentName . '.lft >= ?', $first);
         $qLeft = $this->_tree->returnQueryWithRootId($qLeft, $rootId);
 
         $resultLeft = $qLeft->execute();
-        
+
         // shift right columns
         $qRight = $qRight->set($componentName . '.rgt', $componentName.'.rgt + ?', $delta)
                          ->where($componentName . '.rgt >= ?', $first);

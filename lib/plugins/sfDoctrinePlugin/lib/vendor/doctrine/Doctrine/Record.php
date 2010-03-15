@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Record.php 7298 2010-03-02 19:13:01Z jwage $
+ *  $Id: Record.php 7347 2010-03-15 15:39:17Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,7 +29,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 7298 $
+ * @version     $Revision: 7347 $
  */
 abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Countable, IteratorAggregate, Serializable
 {
@@ -2030,8 +2030,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         // Eliminate relationships missing in the $array
         foreach ($this->_references as $name => $relation) {
 	        $rel = $this->getTable()->getRelation($name);
-	
-			if ( ! isset($array[$name]) && ( ! $rel->isOneToOne() || ! isset($array[$rel->getLocalFieldName()]))) {
+
+            if ( ! $rel->isRefClass() && ! isset($array[$name]) && ( ! $rel->isOneToOne() || ! isset($array[$rel->getLocalFieldName()]))) {
                 unset($this->$name);
             }
         }

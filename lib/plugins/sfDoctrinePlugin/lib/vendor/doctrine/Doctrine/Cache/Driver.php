@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Driver.php 7074 2010-01-28 22:10:33Z hobodave $
+ *  $Id: Driver.php 7343 2010-03-15 14:58:43Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -27,7 +27,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 7074 $
+ * @version     $Revision: 7343 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Jonathan H. Wage <jonwage@gmail.com>
  */
@@ -195,6 +195,23 @@ abstract class Doctrine_Cache_Driver implements Doctrine_Cache_Interface
                     $count++;
                     $this->delete($key);
                 }
+            }
+        }
+        return $count;
+    }
+
+    /**
+     * Delete all cache entries from the cache driver
+     * 
+     * @return integer $count The number of deleted cache entries
+     */
+    public function deleteAll() 
+    {
+        $count = 0;
+        if (is_array($keys = $this->_getCacheKeys())) {
+            foreach ($keys as $key) {
+                $count++;
+                $this->delete($key);
             }
         }
         return $count;

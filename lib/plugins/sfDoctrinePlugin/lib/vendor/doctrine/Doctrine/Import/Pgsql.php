@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Pgsql.php 6777 2009-11-19 19:39:02Z jwage $
+ *  $Id: Pgsql.php 7340 2010-03-15 14:42:52Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -26,7 +26,7 @@
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Paul Cooper <pgc@ucecom.com>
  * @author      Lukas Smith <smith@pooteeweet.org> (PEAR MDB2 library)
- * @version     $Revision: 6777 $
+ * @version     $Revision: 7340 $
  * @link        www.phpdoctrine.org
  * @since       1.0
  */
@@ -276,7 +276,7 @@ class Doctrine_Import_Pgsql extends Doctrine_Import
         $results = $this->conn->fetchAssoc($sql, $param);
         foreach ($results as $result) {
             preg_match('/FOREIGN KEY \((.+)\) REFERENCES (.+)\((.+)\)/', $result['condef'], $values);
-            if ((strpos(',', $values[1]) === false) && (strpos(',', $values[3]) === false)) {
+            if ((strpos(',', $values[1]) === false) && (strpos(',', $values[2]) === false)) {
                 $tableName = trim($values[2], '"');
                 $relations[] = array('table'   => $tableName,
                                      'local'   => $values[1],

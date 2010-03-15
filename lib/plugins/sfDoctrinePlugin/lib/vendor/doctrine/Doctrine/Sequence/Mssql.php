@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Mssql.php 6537 2009-10-19 20:11:24Z guilhermeblanco $
+ *  $Id: Mssql.php 7357 2010-03-15 16:35:33Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -28,7 +28,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 6537 $
+ * @version     $Revision: 7357 $
  */
 class Doctrine_Sequence_Mssql extends Doctrine_Sequence
 {
@@ -133,8 +133,12 @@ class Doctrine_Sequence_Mssql extends Doctrine_Sequence
             && ! is_null($serverInfo['major'])
             && $serverInfo['major'] >= 8) {
 
-            $query = 'SELECT SCOPE_IDENTITY()';
-
+            if (isset($table))
+            {
+                $query = 'SELECT IDENT_CURRENT(\'' . $this->conn->quoteIdentifier($table) . '\')';
+            } else {
+                $query = 'SELECT SCOPE_IDENTITY()';
+            }
         } else {
             $query = 'SELECT @@IDENTITY';
         }

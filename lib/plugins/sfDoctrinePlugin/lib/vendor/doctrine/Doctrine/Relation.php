@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Relation.php 6743 2009-11-17 20:07:47Z jwage $
+ *  $Id: Relation.php 7347 2010-03-15 15:39:17Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -28,7 +28,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 6743 $
+ * @version     $Revision: 7347 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 abstract class Doctrine_Relation implements ArrayAccess
@@ -73,6 +73,8 @@ abstract class Doctrine_Relation implements ArrayAccess
                                   'foreignKeyName' => null,
                                   'orderBy' => null
                                   );
+
+    protected $_isRefClass = null;
 
     /**
      * constructor
@@ -414,6 +416,24 @@ abstract class Doctrine_Relation implements ArrayAccess
         } else {
             return $table->getOrderByStatement($alias, $columnNames);
         }
+    }
+
+    public function isRefClass()
+    {
+        if ($this->_isRefClass === null) {
+            $this->_isRefClass = false;
+            $table = $this->getTable();
+            foreach ($table->getRelations() as $name => $relation) {
+                foreach ($relation['table']->getRelations() as $relation) {
+                    if (isset($relation['refTable']) && $relation['refTable'] === $table) {
+                        $this->_isRefClass = true;
+                        break(2);
+                    }
+                }
+            }
+        }
+
+        return $this->_isRefClass;
     }
 
     /**

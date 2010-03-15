@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: RawSql.php 7251 2010-03-01 20:47:32Z jwage $
+ *  $Id: RawSql.php 7339 2010-03-15 14:33:07Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -33,7 +33,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 7251 $
+ * @version     $Revision: 7339 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_RawSql extends Doctrine_Query_Abstract
@@ -308,7 +308,7 @@ class Doctrine_RawSql extends Doctrine_Query_Abstract
         	$fields[] = $tableAlias . '.' . $key;
         }
 
-        $q = 'SELECT COUNT( DISTINCT '.implode(',',$fields).') as num_results';
+        $q = 'SELECT COUNT(*) as num_results FROM (SELECT DISTINCT '.implode(', ',$fields);
 
         $string = $this->getInheritanceCondition($this->getRootAlias());
         if ( ! empty($string)) {
@@ -319,6 +319,8 @@ class Doctrine_RawSql extends Doctrine_Query_Abstract
         $q .= ( ! empty($this->_sqlParts['where']))?   ' WHERE '    . implode(' AND ', $this->_sqlParts['where']) : '';
         $q .= ( ! empty($this->_sqlParts['groupby']))? ' GROUP BY ' . implode(', ', $this->_sqlParts['groupby']) : '';
         $q .= ( ! empty($this->_sqlParts['having']))?  ' HAVING '   . implode(' AND ', $this->_sqlParts['having']) : '';
+
+        $q .= ') as results';
 
         if ( ! empty($string)) {
             array_pop($this->_sqlParts['where']);

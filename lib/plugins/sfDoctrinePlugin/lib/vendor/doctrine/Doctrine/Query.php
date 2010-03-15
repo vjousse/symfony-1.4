@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Query.php 7325 2010-03-11 15:37:02Z jwage $
+ *  $Id: Query.php 7346 2010-03-15 15:35:46Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -30,7 +30,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 7325 $
+ * @version     $Revision: 7346 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @todo        Proposal: This class does far too much. It should have only 1 task: Collecting
  *              the DQL query parts and the query parameters (the query state and caching options/methods
@@ -1397,7 +1397,7 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
                 $e = $this->_tokenizer->bracketExplode($part, ' ');
                 foreach ($e as $f) {
                     if ($f == 0 || $f % 2 == 0) {
-                        $partOriginal = trim($f);
+                        $partOriginal = str_replace(',', '', trim($f));
                         $callback = create_function('$e', 'return trim($e, \'[]`"\');');
                         $part = trim(implode('.', array_map($callback, explode('.', $partOriginal))));
                 
