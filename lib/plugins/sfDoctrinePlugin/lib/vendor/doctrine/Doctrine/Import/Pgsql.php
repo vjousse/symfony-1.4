@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Pgsql.php 7340 2010-03-15 14:42:52Z jwage $
+ *  $Id: Pgsql.php 7370 2010-03-15 19:12:57Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -26,7 +26,7 @@
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Paul Cooper <pgc@ucecom.com>
  * @author      Lukas Smith <smith@pooteeweet.org> (PEAR MDB2 library)
- * @version     $Revision: 7340 $
+ * @version     $Revision: 7370 $
  * @link        www.phpdoctrine.org
  * @since       1.0
  */
@@ -48,7 +48,7 @@ class Doctrine_Import_Pgsql extends Doctrine_Import
                                                     (SELECT oid FROM pg_namespace
                                                      WHERE nspname NOT LIKE 'pg_%' AND nspname != 'information_schema'",
                         'listSequences' => "SELECT
-                                                relname
+                                                regexp_replace(relname, '_seq$', '')
                                             FROM
                                                 pg_class
                                             WHERE relkind = 'S' AND relnamespace IN
@@ -276,7 +276,7 @@ class Doctrine_Import_Pgsql extends Doctrine_Import
         $results = $this->conn->fetchAssoc($sql, $param);
         foreach ($results as $result) {
             preg_match('/FOREIGN KEY \((.+)\) REFERENCES (.+)\((.+)\)/', $result['condef'], $values);
-            if ((strpos(',', $values[1]) === false) && (strpos(',', $values[2]) === false)) {
+            if ((strpos($values[1], ',') === false) && (strpos($values[3], ',') === false)) {
                 $tableName = trim($values[2], '"');
                 $relations[] = array('table'   => $tableName,
                                      'local'   => $values[1],

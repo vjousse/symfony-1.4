@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: From.php 5798 2009-06-02 15:10:46Z piccoloprincipe $
+ *  $Id: From.php 7384 2010-03-15 21:31:37Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -27,7 +27,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 5798 $
+ * @version     $Revision: 7384 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_Query_From extends Doctrine_Query_Part
@@ -43,7 +43,7 @@ class Doctrine_Query_From extends Doctrine_Query_Part
     public function parse($str, $return = false)
     {
         $str = trim($str);
-        $parts = $this->_tokenizer->bracketExplode($str, 'JOIN');
+        $parts = $this->_tokenizer->bracketExplode($str, 'JOIN ');
 
         $from = $return ? array() : null;
 

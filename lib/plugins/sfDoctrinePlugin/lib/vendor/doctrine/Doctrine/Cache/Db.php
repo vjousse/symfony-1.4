@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Db.php 7074 2010-01-28 22:10:33Z hobodave $
+ *  $Id: Db.php 7381 2010-03-15 21:22:46Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -27,7 +27,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 7074 $
+ * @version     $Revision: 7381 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Jonathan H. Wage <jonwage@gmail.com>
  */
@@ -211,12 +211,7 @@ class Doctrine_Cache_Db extends Doctrine_Cache_Driver
             return $hex;
         }
 
-        $bin = '';
-        for ($a = 0; $a < strlen($hex); $a += 2) {
-            $bin .= chr(hexdec($hex{$a} . $hex{($a + 1)}));
-        }
-
-        return $bin;
+        return pack("H*", $hex);
     }
 
     /**

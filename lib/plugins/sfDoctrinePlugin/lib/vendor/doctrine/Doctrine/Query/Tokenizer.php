@@ -297,7 +297,8 @@ class Doctrine_Query_Tokenizer
      *
      * @return string
      */
-    private function getSplitRegExpFromArray(array $d){
+    private function getSplitRegExpFromArray(array $d)
+    {
         foreach ($d as $key => $string) {
             $escapedString = preg_quote($string);
             if (preg_match('#^\w+$#', $string)) {
@@ -353,7 +354,7 @@ class Doctrine_Query_Tokenizer
         $i = 0;
 
         foreach ($quoteTerms as $key => $val) {
-            if ($key & 1){ // a quoted string
+            if ($key & 1) { // a quoted string
                // If the last term had no ending delimiter, we append the string to the element,
                // otherwise, we create a new element without delimiter
                if ($terms[$i - 1][1] == '') {
@@ -365,7 +366,7 @@ class Doctrine_Query_Tokenizer
                 // Do the clause explode
                 $subterms = $this->clauseExplodeNonQuoted($val, $regexp);
 
-                foreach ($subterms as &$sub){
+                foreach ($subterms as &$sub) {
                     $c1 = substr_count($sub[0], $e1);
                     $c2 = substr_count($sub[0], $e2);
 
@@ -509,7 +510,8 @@ class Doctrine_Query_Tokenizer
      *
      * @return array
      */
-    public function quotedStringExplode($str){
+    public function quotedStringExplode($str)
+    {
         // Split by all possible incarnations of a quote
         $split = array_map('preg_quote', array("\\'","''","'", "\\\"", "\"\"", "\""));
         $split = '#(' . implode('|', $split) . ')#';
@@ -528,7 +530,7 @@ class Doctrine_Query_Tokenizer
                         $i++;
                     }
                 } else if ($mode == $val) {
-                    if ( ! isset($parts[$i])){
+                    if ( ! isset($parts[$i])) {
                         $parts[$i] = $val;
                     } else {
                         $parts[$i] .= $val;
@@ -541,7 +543,7 @@ class Doctrine_Query_Tokenizer
                 }
             }
 
-            if ( ! isset($parts[$i])){
+            if ( ! isset($parts[$i])) {
                 $parts[$i] = $val;
             } else {
                 $parts[$i] .= $val;
