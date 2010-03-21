@@ -18,7 +18,7 @@
  * @subpackage view
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfView.class.php 23940 2009-11-14 17:58:19Z fabien $
+ * @version    SVN: $Id: sfView.class.php 28641 2010-03-21 10:20:44Z fabien $
  */
 abstract class sfView
 {
@@ -288,7 +288,7 @@ abstract class sfView
   /**
    * Indicates whether or not a parameter exist for the current view.
    *
-   * @param  string $name  Name of the paramater
+   * @param  string $name  Name of the parameter
    *
    * @return bool true, if the parameter exists otherwise false
    */
