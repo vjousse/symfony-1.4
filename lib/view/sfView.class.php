@@ -18,7 +18,7 @@
  * @subpackage view
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfView.class.php 28641 2010-03-21 10:20:44Z fabien $
+ * @version    SVN: $Id: sfView.class.php 28713 2010-03-23 15:08:22Z fabien $
  */
 abstract class sfView
 {
@@ -363,12 +363,6 @@ abstract class sfView
       {
         throw new sfRenderException(sprintf('The template "%s" does not exist or is unreadable in "%s".', $this->template, $this->directory));
       }
-    }
-
-    // check to see if this is a decorator template
-    if ($this->decorator && !is_readable($this->decoratorDirectory.'/'.$this->decoratorTemplate))
-    {
-      throw new sfRenderException(sprintf('The decorator template "%s" does not exist or is unreadable in "%s".', $this->decoratorTemplate, $this->decoratorDirectory));
     }
   }
 

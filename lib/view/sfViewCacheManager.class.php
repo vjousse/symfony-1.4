@@ -18,7 +18,7 @@
  * @package    symfony
  * @subpackage view
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfViewCacheManager.class.php 24615 2009-11-30 22:30:46Z Kris.Wallsmith $
+ * @version    SVN: $Id: sfViewCacheManager.class.php 28714 2010-03-23 15:17:06Z fabien $
  */
 class sfViewCacheManager
 {
@@ -142,6 +142,13 @@ class sfViewCacheManager
       if (!$contextualPrefix)
       {
         list($route_name, $params) = $this->controller->convertUrlStringToParameters($this->routing->getCurrentInternalUri());
+
+        // if there is no module/action, it means that we have a 404 and the user is trying to cache it
+        if (!isset($params['module']) || !isset($params['action']))
+        {
+          $params['module'] = sfConfig::get('sf_error_404_module');
+          $params['action'] = sfConfig::get('sf_error_404_action');
+        }
         $cacheKey = $this->convertParametersToKey($params);
       }
       else
