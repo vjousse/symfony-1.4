@@ -18,7 +18,7 @@
  * @package    symfony
  * @subpackage view
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfViewCacheManager.class.php 28714 2010-03-23 15:17:06Z fabien $
+ * @version    SVN: $Id: sfViewCacheManager.class.php 28785 2010-03-25 13:11:07Z fabien $
  */
 class sfViewCacheManager
 {
@@ -703,6 +703,7 @@ class sfViewCacheManager
     {
       $this->dispatcher->notify(new sfEvent($this, 'application.log', array('Generate cache key')));
     }
+    ksort($parameters);
 
     return md5(serialize($parameters));
   }
