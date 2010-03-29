@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Record.php 7387 2010-03-15 21:48:49Z jwage $
+ *  $Id: Record.php 7485 2010-03-29 18:24:45Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,7 +29,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 7387 $
+ * @version     $Revision: 7485 $
  */
 abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Countable, IteratorAggregate, Serializable
 {
@@ -1361,9 +1361,13 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         }
         
         try {
-            if ( ! isset($this->_references[$fieldName]) && $load) {
-                $rel = $this->_table->getRelation($fieldName);
-                $this->_references[$fieldName] = $rel->fetchRelatedFor($this);
+            if ( ! isset($this->_references[$fieldName])) {
+                if ($load) {
+                    $rel = $this->_table->getRelation($fieldName);
+                    $this->_references[$fieldName] = $rel->fetchRelatedFor($this);
+                } else {
+                    $this->_references[$fieldName] = null;
+                }
             }
 
             if ($this->_references[$fieldName] === self::$_null) {
@@ -1606,13 +1610,16 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     }
 
     /**
-     * test whether a field (column, mapped value, related component) is accessible by @see get()
+     * test whether a field (column, mapped value, related component, accessor) is accessible by @see get()
      *
      * @param string $fieldName
      * @return boolean
      */
     public function contains($fieldName)
     {
+        if ($this->hasAccessor($fieldName)) {
+            return true;
+        }
         if (array_key_exists($fieldName, $this->_data)) {
             // this also returns true if the field is a Doctrine_Null.
             // imho this is not correct behavior.

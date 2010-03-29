@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Oracle.php 6946 2009-12-14 20:06:51Z adrive $
+ *  $Id: Oracle.php 7489 2010-03-29 18:48:44Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,7 +29,7 @@
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.phpdoctrine.org
  * @since       1.0
- * @version     $Revision: 6946 $
+ * @version     $Revision: 7489 $
  */
 class Doctrine_Export_Oracle extends Doctrine_Export
 {
@@ -498,7 +498,7 @@ END;';
         if ( ! empty($changes['add']) && is_array($changes['add'])) {
             $fields = array();
             foreach ($changes['add'] as $fieldName => $field) {
-                $fields[] = $this->conn->getDeclaration($fieldName, $field);
+                $fields[] = $this->getDeclaration($fieldName, $field); 
             }
             $result = $this->conn->exec('ALTER TABLE ' . $name . ' ADD (' . implode(', ', $fields) . ')');
         }
@@ -506,7 +506,7 @@ END;';
         if ( ! empty($changes['change']) && is_array($changes['change'])) {
             $fields = array();
             foreach ($changes['change'] as $fieldName => $field) {
-                $fields[] = $fieldName. ' ' . $this->conn->getDeclaration('', $field['definition']);
+                $fields[] = $fieldName. ' ' . $this->getDeclaration('', $field['definition']);
             }
             $result = $this->conn->exec('ALTER TABLE ' . $name . ' MODIFY (' . implode(', ', $fields) . ')');
         }

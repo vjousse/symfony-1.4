@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: Import.php 6802 2009-11-24 20:45:54Z jwage $
+ *  $Id: Import.php 7486 2010-03-29 18:36:15Z jwage $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -30,7 +30,7 @@
  * @link        www.phpdoctrine.org
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @since       1.0
- * @version     $Revision: 6802 $
+ * @version     $Revision: 7486 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Jukka Hassinen <Jukka.Hassinen@BrainAlliance.com>
  */
@@ -358,18 +358,18 @@ class Doctrine_Import extends Doctrine_Connection_Module
      * method for importing existing schema to Doctrine_Record classes
      *
      * @param string $directory
-     * @param array $databases
+     * @param array $connections Array of connection names to generate models for
      * @return array                the names of the imported classes
      */
-    public function importSchema($directory, array $databases = array(), array $options = array())
+    public function importSchema($directory, array $connections = array(), array $options = array())
     {
-        $connections = Doctrine_Manager::getInstance()->getConnections();
         $classes = array();
 
-        foreach ($connections as $name => $connection) {
-          // Limit the databases to the ones specified by $databases.
+        $manager = Doctrine_Manager::getInstance();
+        foreach ($manager as $name => $connection) {
+          // Limit the databases to the ones specified by $connections.
           // Check only happens if array is not empty
-          if ( ! empty($databases) && ! in_array($name, $databases)) {
+          if ( ! empty($connections) && ! in_array($name, $connections)) {
             continue;
           }
 
