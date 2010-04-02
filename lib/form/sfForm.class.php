@@ -23,7 +23,7 @@
  * @package    symfony
  * @subpackage form
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfForm.class.php 27954 2010-02-12 16:12:44Z Kris.Wallsmith $
+ * @version    SVN: $Id: sfForm.class.php 28963 2010-04-01 14:34:54Z fabien $
  */
 class sfForm implements ArrayAccess, Iterator, Countable
 {
@@ -582,8 +582,8 @@ class sfForm implements ArrayAccess, Iterator, Countable
   /**
    * Set a validator for the given field name.
    *
-   * @param string      $name      The field name
-   * @param sfValidator $validator The validator
+   * @param string          $name      The field name
+   * @param sfValidatorBase $validator The validator
    *
    * @return sfForm The current form instance
    */
@@ -601,7 +601,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
    *
    * @param  string      $name      The field name
    *
-   * @return sfValidator $validator The validator
+   * @return sfValidatorBase $validator The validator
    */
   public function getValidator($name)
   {
