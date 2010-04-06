@@ -16,7 +16,7 @@
  * @subpackage controller
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfController.class.php 28365 2010-03-03 14:42:10Z fabien $
+ * @version    SVN: $Id: sfController.class.php 29000 2010-04-06 17:53:15Z Kris.Wallsmith $
  */
 abstract class sfController
 {
@@ -98,6 +98,9 @@ abstract class sfController
       {
         throw new sfConfigurationException(sprintf('The module "%s" is not enabled.', $moduleName));
       }
+
+      // check for a module generator config file
+      $this->context->getConfigCache()->import('modules/'.$moduleName.'/config/generator.yml', false, true);
 
       // one action per file or one file for all actions
       $classFile   = strtolower($extension);

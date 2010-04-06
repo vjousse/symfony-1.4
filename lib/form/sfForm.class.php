@@ -23,7 +23,7 @@
  * @package    symfony
  * @subpackage form
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfForm.class.php 28963 2010-04-01 14:34:54Z fabien $
+ * @version    SVN: $Id: sfForm.class.php 28996 2010-04-06 13:59:11Z Kris.Wallsmith $
  */
 class sfForm implements ArrayAccess, Iterator, Countable
 {
@@ -494,7 +494,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
     $form = clone $form;
     unset($form[self::$CSRFFieldName]);
 
-    $this->defaults = array_merge($this->defaults, $form->getDefaults());
+    $this->defaults = $form->getDefaults() + $this->defaults;
 
     foreach ($form->getWidgetSchema()->getPositions() as $field)
     {
@@ -506,8 +506,8 @@ class sfForm implements ArrayAccess, Iterator, Countable
       $this->validatorSchema[$field] = $validator;
     }
 
-    $this->getWidgetSchema()->setLabels(array_merge($this->getWidgetSchema()->getLabels(), $form->getWidgetSchema()->getLabels()));
-    $this->getWidgetSchema()->setHelps(array_merge($this->getWidgetSchema()->getHelps(), $form->getWidgetSchema()->getHelps()));
+    $this->getWidgetSchema()->setLabels($form->getWidgetSchema()->getLabels() + $this->getWidgetSchema()->getLabels());
+    $this->getWidgetSchema()->setHelps($form->getWidgetSchema()->getHelps() + $this->getWidgetSchema()->getHelps());
 
     $this->mergePreValidator($form->getValidatorSchema()->getPreValidator());
     $this->mergePostValidator($form->getValidatorSchema()->getPostValidator());
@@ -1143,7 +1143,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
   {
     if (null === $this->formFieldSchema)
     {
-      $values = $this->isBound ? $this->taintedValues : array_merge($this->widgetSchema->getDefaults(), $this->defaults);
+      $values = $this->isBound ? $this->taintedValues : $this->defaults + $this->widgetSchema->getDefaults();
 
       $this->formFieldSchema = new sfFormFieldSchema($this->widgetSchema, null, null, $values, $this->errorSchema);
     }

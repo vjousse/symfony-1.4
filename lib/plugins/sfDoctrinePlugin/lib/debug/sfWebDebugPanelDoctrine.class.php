@@ -16,7 +16,7 @@
  * @subpackage debug
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfWebDebugPanelDoctrine.class.php 28353 2010-03-02 20:44:00Z Kris.Wallsmith $
+ * @version    SVN: $Id: sfWebDebugPanelDoctrine.class.php 28999 2010-04-06 17:42:14Z Kris.Wallsmith $
  */
 class sfWebDebugPanelDoctrine extends sfWebDebugPanel
 {
@@ -76,14 +76,17 @@ class sfWebDebugPanelDoctrine extends sfWebDebugPanel
     $databaseManager = sfContext::getInstance()->getDatabaseManager();
 
     $events = array();
-    foreach ($databaseManager->getNames() as $name)
+    if ($databaseManager)
     {
-      $database = $databaseManager->getDatabase($name);
-      if ($database instanceof sfDoctrineDatabase && $profiler = $database->getProfiler())
+      foreach ($databaseManager->getNames() as $name)
       {
-        foreach ($profiler->getQueryExecutionEvents() as $event)
+        $database = $databaseManager->getDatabase($name);
+        if ($database instanceof sfDoctrineDatabase && $profiler = $database->getProfiler())
         {
-          $events[$event->getSequence()] = $event;
+          foreach ($profiler->getQueryExecutionEvents() as $event)
+          {
+            $events[$event->getSequence()] = $event;
+          }
         }
       }
     }
