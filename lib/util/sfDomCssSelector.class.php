@@ -19,7 +19,7 @@
  * @package    symfony
  * @subpackage util
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfDomCssSelector.class.php 29158 2010-04-15 08:33:58Z bschussek $
+ * @version    SVN: $Id: sfDomCssSelector.class.php 29521 2010-05-19 11:47:56Z fabien $
  */
 class sfDomCssSelector implements Countable, Iterator
 {
@@ -185,7 +185,7 @@ class sfDomCssSelector implements Countable, Iterator
             {
               $attrName = $match[1];
               $attrOperator = $match[2];
-              $attrValue = $match[4] === '' ? $match[5] : $match[4];
+              $attrValue = $match[4] === '' ? (isset($match[5]) ? $match[5] : '') : $match[4];
 
               switch ($attrOperator)
               {
