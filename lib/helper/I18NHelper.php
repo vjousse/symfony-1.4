@@ -14,7 +14,7 @@
  * @package    symfony
  * @subpackage helper
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: I18NHelper.php 29522 2010-05-19 12:19:44Z fabien $
+ * @version    SVN: $Id: I18NHelper.php 29597 2010-05-24 06:00:11Z fabien $
  */
 
 function __($text, $args = array(), $catalogue = 'messages')
@@ -45,13 +45,18 @@ function __($text, $args = array(), $catalogue = 'messages')
 
 function format_number_choice($text, $args = array(), $number, $catalogue = 'messages')
 {
+  $translated = __($text, $args, $catalogue);
+
   $choice = new sfChoiceFormat();
-  if (false === $retval = $choice->format($text, $number))
+
+  $retval = $choice->format($translated, $number);
+
+  if ($retval === false)
   {
     throw new sfException(sprintf('Unable to parse your choice "%s".', $translated));
   }
 
-  return __($retval, $args, $catalogue);
+  return $retval;
 }
 
 function format_country($country_iso, $culture = null)
