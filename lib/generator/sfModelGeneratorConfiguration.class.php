@@ -6,7 +6,7 @@
  * @package    symfony
  * @subpackage generator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfModelGeneratorConfiguration.class.php 23898 2009-11-14 13:14:04Z bschussek $
+ * @version    SVN: $Id: sfModelGeneratorConfiguration.class.php 29640 2010-05-27 14:59:23Z Jonathan.Wage $
  */
 abstract class sfModelGeneratorConfiguration
 {
@@ -383,19 +383,22 @@ abstract class sfModelGeneratorConfiguration
         foreach ($names as $name)
         {
           list($name, $flag) = sfModelGeneratorConfigurationField::splitFieldWithFlag($name);
-          if (!isset($this->configuration[$context]['fields'][$name]))
+          if (isset($form[$name]))
           {
-            $this->configuration[$context]['fields'][$name] = new sfModelGeneratorConfigurationField($name, array_merge(
-              isset($config['default'][$name]) ? $config['default'][$name] : array(),
-              isset($config['form'][$name]) ? $config['form'][$name] : array(),
-              isset($config[$context][$name]) ? $config[$context][$name] : array(),
-              array('is_real' => false, 'type' => 'Text', 'flag' => $flag)
-            ));
-          }
+            if (!isset($this->configuration[$context]['fields'][$name]))
+            {
+              $this->configuration[$context]['fields'][$name] = new sfModelGeneratorConfigurationField($name, array_merge(
+                isset($config['default'][$name]) ? $config['default'][$name] : array(),
+                isset($config['form'][$name]) ? $config['form'][$name] : array(),
+                isset($config[$context][$name]) ? $config[$context][$name] : array(),
+                array('is_real' => false, 'type' => 'Text', 'flag' => $flag)
+              ));
+            }
 
-          $field = $this->configuration[$context]['fields'][$name];
-          $field->setFlag($flag);
-          $fields[$fieldset][$name] = $field;
+            $field = $this->configuration[$context]['fields'][$name];
+            $field->setFlag($flag);
+            $fields[$fieldset][$name] = $field;
+          }
         }
       }
 
