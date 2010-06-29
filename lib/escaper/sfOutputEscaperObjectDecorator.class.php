@@ -16,7 +16,7 @@
  * @package    symfony
  * @subpackage view
  * @author     Mike Squire <mike@somosis.co.uk>
- * @version    SVN: $Id: sfOutputEscaperObjectDecorator.class.php 29818 2010-06-14 15:52:33Z Kris.Wallsmith $
+ * @version    SVN: $Id: sfOutputEscaperObjectDecorator.class.php 29990 2010-06-25 17:06:20Z Kris.Wallsmith $
  */
 class sfOutputEscaperObjectDecorator extends sfOutputEscaperGetterDecorator implements Countable
 {
@@ -96,6 +96,16 @@ class sfOutputEscaperObjectDecorator extends sfOutputEscaperGetterDecorator impl
   public function __toString()
   {
     return $this->escape($this->escapingMethod, (string) $this->value);
+  }
+
+  /**
+   * Asks the wrapped object whether a property is set.
+   *
+   * @return boolean
+   */
+  public function __isset($key)
+  {
+    return isset($this->value->$key);
   }
 
   /**
