@@ -14,7 +14,7 @@
  * @package    symfony
  * @subpackage util
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfFilesystem.class.php 30527 2010-08-04 16:21:44Z fabien $
+ * @version    SVN: $Id: sfFilesystem.class.php 30912 2010-09-15 11:10:46Z fabien $
  */
 class sfFilesystem
 {
@@ -302,7 +302,7 @@ class sfFilesystem
 
     $output = '';
     $err = '';
-    while (!feof($pipes[1]))
+    while (!feof($pipes[1]) || !feof($pipes[2]))
     {
       foreach ($pipes as $key => $pipe)
       {
