@@ -1,5 +1,7 @@
 <?php
 /*
+ *  $Id$
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -18,26 +20,25 @@
  */
 
 /**
- * Doctrine_Validator_Readonly
- *
+ * Extended version of Doctrine_Hydrator_ScalarDriver, passes its _gatherRowData function a value of false for $aliasPrefix in order to cause it to generate the sorts of array keys one would see in a HYDRATE_ARRAY type return.
+ * Note: This hydrator will have issues with fields in the return that have the same name (such as 2 fields each called id) -- the second field value will overwrite the first field.
  * @package     Doctrine
- * @subpackage  Validator
+ * @subpackage  Hydrate
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
- * @author      Adam Huttler <ahuttler@geminisbs.com>
+ * @since       1.2.3
+ * @version     $Revision$
+ * @author      Will Ferrer
  */
-class Doctrine_Validator_Readonly extends Doctrine_Validator_Driver
+class Doctrine_Hydrator_ArrayShallowDriver extends Doctrine_Hydrator_ScalarDriver
 {
-    /**
-     * checks if value has been modified
-     *
-     * @param mixed $value
-     * @return boolean
-     */
-    public function validate($value)
+    public function hydrateResultSet($stmt)
     {
-        $modified = $this->invoker->getModified();
-        
-        return array_key_exists($this->field, $modified) ? false : true;
+        $cache = array();
+        $result = array();
+        while ($data = $stmt->fetch(Doctrine_Core::FETCH_ASSOC)) {
+            $result[] = $this->_gatherRowData($data, $cache, false);
+        }
+        return $result;
     }
 }
