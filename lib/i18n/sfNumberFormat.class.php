@@ -13,7 +13,7 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version    $Id: sfNumberFormat.class.php 28723 2010-03-23 16:37:43Z FabianLange $
+ * @version    $Id: sfNumberFormat.class.php 32635 2011-06-11 13:11:51Z fabien $
  * @package    symfony
  * @subpackage i18n
  */
@@ -86,7 +86,7 @@ class sfNumberFormat
     }
     else if ($formatInfo instanceof sfCultureInfo)
     {
-      $this->formatInfo = $formatInfo->sfNumberFormat;
+      $this->formatInfo = $formatInfo->getNumberFormat();
     }
     else if ($formatInfo instanceof sfNumberFormatInfo)
     {
